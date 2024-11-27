@@ -56,7 +56,7 @@ async def load_price(message: types.Message, state: FSMContext):
     await fsm_product.next()
     await message.answer('Дайте артикул товару: ', reply_markup=cancel)
 
-async def load_article(message: types.Message, state: FSMContext):
+async def load_article_product(message: types.Message, state: FSMContext):
     if not message.text.isdigit():
         await message.answer('Артикул должен быть числом!')
         return
@@ -110,12 +110,12 @@ async def cancel_fsm(message: types.Message, state: FSMContext):
         await message.answer('Отменено', reply_markup=kb_remove)
 
 def register_fsm_products_handler(dp: Dispatcher):
-    dp.register_message_handler(cancel_fsm, Text(equals='Отмена', ignore_case=True), state="*")
-    dp.register_message_handler(confirm_fsm, Text(equals=['Да','Нет']),state="*")
+    dp.register_message_handler(cancel_fsm, Text(equals='Отмена', ignore_case=True), state=fsm_product)
+    dp.register_message_handler(confirm_fsm, Text(equals=['Да','Нет']),state=fsm_product)
     dp.register_message_handler(start_fsm, commands=['add_product'])
     dp.register_message_handler(load_name, state=fsm_product.name)
     dp.register_message_handler(load_category, state=fsm_product.category)
     dp.register_message_handler(load_size, state=fsm_product.size)
     dp.register_message_handler(load_price, state=fsm_product.price)
-    dp.register_message_handler(load_article, state=fsm_product.article)
+    dp.register_message_handler(load_article_product, state=fsm_product.article)
     dp.register_message_handler(load_photo, state=fsm_product.photo, content_types=['photo'])

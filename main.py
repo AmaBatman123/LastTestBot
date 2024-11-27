@@ -1,13 +1,14 @@
 from config import bot, dp, is_staff
 from aiogram import executor
 from db import db_main
-from handlers import commands, fsm_products, send_products
+from handlers import commands, fsm_products, send_products, fsm_order
 import logging
 
 commands.register_commands_handler(dp)
+fsm_order.register_fsm_order_handler(dp)
+send_products.register_handlers(dp)
 if is_staff:
     fsm_products.register_fsm_products_handler(dp)
-send_products.register_handlers(dp)
 
 chat_id = '372040467'
 
