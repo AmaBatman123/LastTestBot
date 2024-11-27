@@ -11,7 +11,8 @@ async def start(message: types.Message):
 async def about_bot(message: types.Message):
     try:
         info_text = ("Данный бот предназначен для работы с интернет"
-                     "магазином и используется исключительно в учебных целях")
+                     "магазином и используется исключительно в учебных целях"
+                     "Доступные команды: \n /start \n /help \n /products \n /order \n /add_product(для персонала)")
         await message.answer(info_text)
     except Exception as e:
         await message.answer(text=f'Произошла ошибка {e}')
