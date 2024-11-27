@@ -6,6 +6,7 @@ from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import ReplyKeyboardRemove
 from buttons import cancel, confirm_order, sizes_order
+from config import bot, staff
 from db import db_main
 
 
@@ -79,6 +80,8 @@ async def confirm_order_func(message: types.Message, state: FSMContext):
                     count=data['count'],
                     phone_number=data['phone_number']
                 )
+                await send_order_to_staff(data)
+
                 await state.finish()
         elif message.text == 'Нет':
             await state.finish()
@@ -98,6 +101,17 @@ async def cancel_order(message: types.Message, state: FSMContext):
     if current_state is not None:
         await state.finish()
         await message.answer('Отменено', reply_markup=kb_remove)
+
+async def send_order_to_staff(data):
+    for user in staff:
+        try:
+            await bot.send_message(chat_id=user['id'], text=f"Ваш заказ:\n"
+                                                            f"Артикул: {data['product_article']}\n"
+                                                            f"Размер: {data['size']}\n"
+                                                            f"Количество: {data['count']}\n"
+                                                            f"Номер для связи: {data['phone_number']}\n")
+        except Exception as e:
+            print(f"Ошибка при отправке сообщения пользователю {user['name']} ({user['id']}): {e}")
 
 def register_fsm_order_handler(dp: Dispatcher):
     dp.register_message_handler(cancel_order, Text(equals='Отмена', ignore_case=True), state=fsm_order)
