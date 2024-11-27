@@ -1,4 +1,6 @@
 import sqlite3
+from itertools import product
+
 from db import queries
 import aiosqlite
 
@@ -19,3 +21,20 @@ async def sql_insert_products(name, category, size, price, article, photo):
         name, category, size, price, article, photo
     ))
     db.commit()
+
+    # CRUD - Read
+#=================================================================
+
+async def get_db_connection():
+    conn = sqlite3.connect('db/products')
+    conn.row_factory = aiosqlite.Row
+    return conn
+
+async def fetch_all_products():
+    conn = await get_db_connection()
+    products = conn.execute("""
+        SELECT * FROM products
+    """).fetchall()
+    conn.close()
+    return products
+
