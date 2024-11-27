@@ -5,8 +5,8 @@ async def start(message: types.Message):
     await bot.send_message(chat_id=message.from_user.id,
                            text=f'Привет {message.from_user.first_name} \n'
                                 f'Рад приветствовать тебя в нашем интернет магазине! \n'
-                                f'Твой ID - {message.from_user.id}'
-                                f'Будешь много покупать, я все узнаю')
+                                f'Твой ID - {message.from_user.id} \n'
+                                f'Будешь много покупать, деньги закончатся')
 
 async def about_bot(message: types.Message):
     try:

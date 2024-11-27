@@ -5,6 +5,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import ReplyKeyboardRemove
 from buttons import cancel, confirm_kb, sizes_kb
 from db import db_main
+from config import is_staff
 
 class fsm_product(StatesGroup):
     name = State()
@@ -15,8 +16,13 @@ class fsm_product(StatesGroup):
     photo = State()
 
 async def start_fsm(message: types.Message):
-    await message.answer('Введите название товара: ', reply_markup=cancel)
-    await fsm_product.name.set()
+    if not await is_staff(message.from_user.id):
+        await message.answer('У вас нет доступа к этой команде!')
+        return
+    else:
+        await message.answer('Введите название товара: ', reply_markup=cancel)
+        await fsm_product.name.set()
+
 
 async def load_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -40,8 +46,12 @@ async def load_size(message: types.Message, state: FSMContext):
     await message.answer('Определите цену на товар: ', reply_markup=cancel)
 
 async def load_price(message: types.Message, state: FSMContext):
+    if not message.text.isdigit():
+        await message.answer('Цена должна быть числом!')
+        return
+
     async with state.proxy() as data:
-        data['price'] = message.text
+        data['price'] = int(message.text)
 
     await fsm_product.next()
     await message.answer('Дайте артикул товару: ', reply_markup=cancel)

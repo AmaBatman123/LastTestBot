@@ -12,4 +12,4 @@ storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
 async def is_staff(user_id: int) -> bool:
-    return user_id in staff
+    return any(staff_member['id'] == user_id for staff_member in staff)
