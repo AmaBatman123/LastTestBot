@@ -12,3 +12,10 @@ async def sql_create():
     db.commit()
 
     # Запись FSM_Products
+#=================================================================
+
+async def sql_insert_products(name, category, size, price, article, photo):
+    cursor.execute(queries.INSERT_PRODUCTS, (
+        name, category, size, price, article, photo
+    ))
+    db.commit()

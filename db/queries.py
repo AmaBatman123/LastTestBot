@@ -11,6 +11,6 @@ CREATE_TABLE_PRODUCTS = """
 """
 
 INSERT_PRODUCTS = """
-    INSERT INTO products.db (name, category, size, price, article, photo)
+    INSERT INTO products (name, category, size, price, article, photo)
     VALUES (?, ?, ?, ?, ?, ?)
 """
